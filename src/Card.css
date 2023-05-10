@@ -1,0 +1,20 @@
+.card-wrapper{
+    border: hotpink 2px solid;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.alive p {
+    color: aqua;
+}
+
+.dead p {
+    color: coral;
+}
+.alive h1 {
+    color: green;
+}
+
+.dead h1 {
+    color: red;
+}
