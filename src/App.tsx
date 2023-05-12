@@ -6,28 +6,44 @@ import SearchBar from "./SearchBar/SearchBar";
 import {RandMCharacter} from "./Model/RandMCharacter";
 import axios from "axios";
 
+
+type Info = {
+    next:string,
+    prev:string,
+}
+
 function App() {
 
-    const [characterResponse, setCharacterResponse] = useState<RandMCharacter[]>([])
 
 
-    useEffect(getAllCharacter,[])
+    const [characters, setCharacters] = useState<RandMCharacter[]>([])
+
+    const [info, setInfo] = useState<Info>({next:"",prev:""})
+    const [url, setUrl] = useState<string>("https://rickandmortyapi.com/api/character")
+
+    function onClickSetUrlNext(){
+     setUrl(info.next)
+    }
+    function onClickSetUrlPrev(){
+     setUrl(info.prev)
+    }
 
 
-    function getAllCharacter(){
-        axios.get("https://rickandmortyapi.com/api/character")
+    function getAllCharacter() {
+        axios.get(url)
             .then(response => {
-                setCharacterResponse(response.data.results)
+                setCharacters(response.data.results)
+                setInfo(response.data.info)
             })
     }
+
+    useEffect(getAllCharacter, [url])
 
 
     const [filter, setFilter] = useState<string>("")
 
-
-    const filteredList:RandMCharacter[] = characterResponse.filter(current =>
+    const filteredList: RandMCharacter[] = characters.filter(current =>
         current.name.toLowerCase().includes(filter.toLowerCase()))
-
 
     return (
         <div className="App">
@@ -36,7 +52,9 @@ function App() {
                     src={logo}
                     className="App-logo" alt="logo"/>
                 <SearchBar onTextChange={setFilter} text={filter}/>
-                <CharacterGallery  characterList={filteredList} searchText={setFilter}/>
+                {info.next === null ? <></> : <button onClick={onClickSetUrlNext}>NEXT</button>}
+                {info.prev === null ? <></> : <button onClick={onClickSetUrlPrev}>PREV</button>}
+                <CharacterGallery characterList={filteredList} searchText={setFilter}/>
             </header>
         </div>
     );
