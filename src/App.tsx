@@ -5,6 +5,9 @@ import CharacterGallery from "./CharacterGallery/CharacterGallery";
 import SearchBar from "./SearchBar/SearchBar";
 import {RandMCharacter} from "./Model/RandMCharacter";
 import axios from "axios";
+import { Route, Routes } from 'react-router-dom';
+import CharacterDetailsCard from './CharacterCard/CharacterDetailsCard';
+import { CharacterModel } from './CharacterModel/CharacterModel';
 
 
 type Info = {
@@ -54,7 +57,10 @@ function App() {
                 <SearchBar onTextChange={setFilter} text={filter}/>
                 {info.next === null ? <></> : <button onClick={onClickSetUrlNext}>NEXT</button>}
                 {info.prev === null ? <></> : <button onClick={onClickSetUrlPrev}>PREV</button>}
-                <CharacterGallery characterList={filteredList} searchText={setFilter}/>
+                <Routes>
+                <Route path={"/"} element={<CharacterGallery characterList={filteredList} searchText={setFilter}/>}/>
+                <Route path={"/character/:id"} element ={<CharacterDetailsCard character={characters}/>}/>
+                </Routes>
             </header>
         </div>
     );
